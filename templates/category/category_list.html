@@ -1,0 +1,8 @@
+{% extends "components/navbar.html" %}
+{% block content %}
+
+<h1>Categories:</h1>
+{% for category in categories %}
+    <h5> {{ category }}</h5>
+{% endfor %}
+{% endblock %}
