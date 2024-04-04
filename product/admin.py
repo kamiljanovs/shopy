@@ -19,7 +19,7 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name', 'product_id')
 
     def save_model(self, request, obj, form, change):
-        obj.title = obj.title.capitalize()
+        obj.name = obj.name.capitalize()
         super().save_model(request, obj, form, change)
 
 
@@ -29,7 +29,7 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ('text', 'product_id')
 
     def save_model(self, request, obj, form, change):
-        obj.title = obj.title.capitalize()
+        obj.text = obj.text.capitalize()
         super().save_model(request, obj, form, change)
 
 
@@ -39,5 +39,5 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ('text', 'id')
 
     def save_model(self, request, obj, form, change):
-        obj.title = obj.title.capitalize()
+        obj.text = obj.text.capitalize()
         super().save_model(request, obj, form, change)

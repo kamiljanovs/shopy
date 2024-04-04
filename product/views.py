@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import datetime
-from product.models import Product, Category
+from product.models import Product, Category, Review
 from product.forms import ProductForm, ReviewForm
 
 
@@ -43,15 +43,21 @@ def product_list_view(request):
     return render(request, 'product/product_list.html', context)
 
 def product_detail_view(request, product_id):
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return HttpResponse("Page not found")
+    if request.method == 'GET':
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse("Page not found")
+        context = {'product': product,
+                   'form': ReviewForm()}
+        return render(request, 'product/product_detail.html', context)
+    elif request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            Review.objects.create(product_id=product_id, **form.cleaned_data)
+            return redirect(f'/products/{product_id}/')
+        return render(request, 'product/product_detail.html', {'form': form})
 
-    product = Product.objects.get(id=product_id)
-    # print(product.categories.all)
-    context = {'product': product}
-    return render(request, 'product/product_detail.html', context)
 
 def category_list_view(request):
     categories = Category.objects.all()
@@ -83,22 +89,5 @@ def product_create_view(request):
                                image=image
                                )
 
-        return redirect('product_list')
-
-
-def review_form_view(request):
-    if request.method == 'GET':
-        form = ReviewForm()
-        return render(request, 'product/product_detail.html', {'form': form})
-
-    if request.method == 'POST':
-        form = ReviewForm()
-        # form.add_error('text', 'The text must not have the word Python')
-        if not form.is_valid():
-            return render(request, 'product/product_detail.html', {'form': form})
-
-        text = form.cleaned_data.get('text')
-
-        Product.objects.create(text=text)
         return redirect('product_list')
 

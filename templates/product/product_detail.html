@@ -26,10 +26,9 @@ Price: <h4>{{ product.price }}</h4>
 {% for review in product.reviews.all %}
     <p>{{ review.text }}</p>
 {% endfor %}
-<form action="" method="post" enctype="">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <label for="text">Text</label>
-    <input type="text" name="text">
+    {{ form }}
     <input type="submit" value="Create Review" class="btn btn-primary">
 </form>
 
