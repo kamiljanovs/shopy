@@ -5,7 +5,7 @@
 <!--{% for category in product.categories.all %}-->
 <!--    <p> {{ category }}</p>-->
 <!--{% endfor %}-->
-<p>{{ product.image }}</p>
+<img src="/media/{{product.image}}" alt="" width="250">
     {% for category in product.categories.all %}
         <p> {{ category }}</p>
     {% endfor %}
@@ -14,21 +14,23 @@
 Size: <p>{{ product.size }}</p>
 Price: <h4>{{ product.price }}</h4>
 
-<h2>
-    Tags:
-</h2>
+<h2>Tags:</h2>
 
 {% for tag in product.tags.all %}
     <p>{{ tag }}</p>
 {% endfor %}
 
 
-<h2>
-    Reviews:
-</h2>
+<h2>Reviews:</h2>
 
 {% for review in product.reviews.all %}
-    <p>{{ review }}</p>
+    <p>{{ review.text }}</p>
 {% endfor %}
+<form action="" method="post" enctype="">
+    {% csrf_token %}
+    <label for="text">Text</label>
+    <input type="text" name="text">
+    <input type="submit" value="Create Review" class="btn btn-primary">
+</form>
 
 {% endblock %}

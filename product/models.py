@@ -10,8 +10,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    price = models.FloatField()
-    size = models.IntegerField()
+    price = models.FloatField(default=0.0)
+    size = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
 
     def __str__(self):

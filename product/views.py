@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import datetime
 from product.models import Product, Category
+from product.forms import ProductForm, ReviewForm
 
 
 def main_page_view(request):
@@ -47,7 +48,7 @@ def product_detail_view(request, product_id):
     except Product.DoesNotExist:
         return HttpResponse("Page not found")
 
-    product = Product.objects.get(id=1)
+    product = Product.objects.get(id=product_id)
     # print(product.categories.all)
     context = {'product': product}
     return render(request, 'product/product_detail.html', context)
@@ -57,3 +58,47 @@ def category_list_view(request):
     # print(products)
     context = {'categories': categories}
     return render(request, 'category/category_list.html', context)
+
+def product_create_view(request):
+    if request.method == 'GET':
+        form = ProductForm()
+        return render(request, 'product/product_create.html', {'form': form})
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        # form.add_error('description', 'The text must not have the word Python')
+        if not form.is_valid():
+            return render(request, 'product/product_create.html', {'form': form})
+
+        title = form.cleaned_data.get('title')
+        description = form.cleaned_data.get('description')
+        price = form.cleaned_data.get('price')
+        size = form.cleaned_data.get('size')
+        image = form.cleaned_data.get('image')
+
+        Product.objects.create(title=title,
+                               description=description,
+                               price=price,
+                               size=size,
+                               image=image
+                               )
+
+        return redirect('product_list')
+
+
+def review_form_view(request):
+    if request.method == 'GET':
+        form = ReviewForm()
+        return render(request, 'product/product_detail.html', {'form': form})
+
+    if request.method == 'POST':
+        form = ReviewForm()
+        # form.add_error('text', 'The text must not have the word Python')
+        if not form.is_valid():
+            return render(request, 'product/product_detail.html', {'form': form})
+
+        text = form.cleaned_data.get('text')
+
+        Product.objects.create(text=text)
+        return redirect('product_list')
+
