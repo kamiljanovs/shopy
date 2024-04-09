@@ -13,6 +13,10 @@
             <div class="card-body">
                 <h5 class="card-title">{{ product.title }}</h5>
                 <p class="card-text">{{ product.description }}</p>
+                <p class="card-text">Author: {{ product.user }}</p>
+                {% for tag in product.tags.all %}
+                    <a href="#" class="btn btn-secondary">{{ tag.text }}</a>
+                {% endfor %}
                 <a href="{{ product.id }}" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>

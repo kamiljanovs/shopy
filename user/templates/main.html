@@ -3,7 +3,7 @@
 {% load static %}
 
 <img src="{% static 'slogo.png' %}" width="200">
-<h1> Welcome to the Main Page</h1>
+<h1> Welcome to the Main Page {{user.username}}</h1>
 <p>Kakoy-to tekst</p>
 
 {% endblock %}

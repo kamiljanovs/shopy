@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 import datetime
 from product.models import Product, Category, Review
 from product.forms import ProductForm, ReviewForm
@@ -65,6 +66,7 @@ def category_list_view(request):
     context = {'categories': categories}
     return render(request, 'category/category_list.html', context)
 
+@login_required(login_url='/login')
 def product_create_view(request):
     if request.method == 'GET':
         form = ProductForm()
@@ -86,7 +88,8 @@ def product_create_view(request):
                                description=description,
                                price=price,
                                size=size,
-                               image=image
+                               image=image,
+                               user=request.user
                                )
 
         return redirect('product_list')

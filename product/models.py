@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Tag(models.Model):
     text = models.CharField(max_length=200)
 
@@ -7,6 +8,11 @@ class Tag(models.Model):
         return self.text
 
 class Product(models.Model):
+    user = models.ForeignKey('user.Users',
+                             on_delete=models.CASCADE,
+                             related_name='products',
+                             null=True,
+                             blank=False)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
